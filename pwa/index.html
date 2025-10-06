@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jan Raj News</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d32f2f">
+  <link rel="icon" href="https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/favicon/favicon.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #fff;
+      color: #222;
+      margin-top: 10%;
+    }
+    h1 { color: #d32f2f; }
+    button {
+      background: #d32f2f; color: white; border: none;
+      padding: 10px 20px; border-radius: 6px; cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📰 Jan Raj News</h1>
+  <p>ताज़ा खबरों के लिए Notification Allow करें 👇</p>
+  <button onclick="askPermission()">Allow Notifications</button>
+
+  <script>
+    // 👉 Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then(() => {
+        console.log('✅ Service Worker Registered');
+      });
+    }
+
+    // 👉 Ask Notification Permission
+    function askPermission() {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification("👋 Welcome to Jan Raj News!", {
+            body: "अब आपको ताज़ा खबरें मिलेंगी 🔔",
+            icon: "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/favicon/favicon.ico"
+          });
+        } else {
+          alert("आपने Notification की अनुमति नहीं दी 😔");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
