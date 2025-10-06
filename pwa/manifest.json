@@ -1,10 +1,10 @@
 {
   "name": "Jan Raj News",
-  "short_name": "JRNM",
+  "short_name": "Jan Raj News",
   "start_url": "https://janrajnews.blogspot.com",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#E42628",
+  "background_color": "#97979d",
+  "theme_color": "#fd3a13",
   "orientation": "portrait",
   "scope": "https://janrajnews.blogspot.com/",
   "id": "NorthHindiNews",
