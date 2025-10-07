@@ -1,0 +1,197 @@
+// ------------------ CONFIG ------------------
+const SHEET_ID = "1vPydfMUK8CScNBnXfyIZqDcGUZfcxtSFCubb-BX4hFg"; 
+const FEED_URL = "https://janrajnews.blogspot.com/feeds/posts/default?alt=rss";
+
+// 👇 Apna Web App URL yahan paste karein (Deploy ke baad)
+const WEBAPP_BASE_URL = "https://script.google.com/macros/s/AKfycbxBnjrwRKvKbdfCzrqDkX81o1DCpJ2DheS33jG1L6R8jgF0sg1M3iB151XhjgUlksQiLQ/exec";
+
+const SENDER_NAME = "Jan Raj News";
+// ------------------------------------------------------------
+
+function getSheet() {
+  return SpreadsheetApp.openById(SHEET_ID);
+}
+
+// ✅ Fixed + Logged subscribeEmail()
+function subscribeEmail(emailRaw) {
+  const email = (emailRaw || "").toString().trim().toLowerCase();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return {status:"error", message:"Invalid email"};
+  }
+
+  const ss = getSheet();
+  const subs = ss.getSheetByName("Subscribers");
+  if (!subs) throw new Error("Subscribers sheet not found. Create a sheet named 'Subscribers'.");
+
+  const data = subs.getDataRange().getValues();
+  Logger.log(`🔍 Checking existing subscribers for: ${email}`);
+
+  for (let i = 1; i < data.length; i++) {
+    const rowEmail = (data[i][0] || "").toString().trim().toLowerCase();
+    const val = String(data[i][2]).trim().toLowerCase();
+    const isSubscribed = (val === "true" || val === "yes" || val === "1");
+
+    Logger.log(`Row ${i+1}: ${rowEmail} | Subscribed Cell=${data[i][2]} | Interpreted=${isSubscribed}`);
+
+    // 🔴 Already subscribed
+    if (rowEmail === email && isSubscribed) {
+      Logger.log("✅ Already subscribed match found");
+      return {status:"already", message:"You are already subscribed!"};
+    }
+
+    // 🟢 Found email but unsubscribed → resubscribe
+    if (rowEmail === email && !isSubscribed) {
+      const token = data[i][1] || Utilities.getUuid();
+      subs.getRange(i + 1, 2).setValue(token);
+      subs.getRange(i + 1, 3).setValue(true);
+      subs.getRange(i + 1, 4).setValue(new Date());
+      Logger.log("♻️ Re-subscribed successfully");
+      return {status:"ok", message:"You are subscribed again.", token: token};
+    }
+  }
+
+  // ✳️ New email → add
+  const token = Utilities.getUuid();
+  subs.appendRow([email, token, true, new Date()]);
+  Logger.log("🆕 New subscriber added");
+  return {status:"ok", message:"Subscribed successfully", token: token};
+}
+
+// 📨 Handle form POST request
+function doPost(e) {
+  try {
+    const email = e && e.parameter && e.parameter.email ? e.parameter.email : "";
+    const result = subscribeEmail(email);
+    return ContentService
+      .createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({status:"error", message: err.message}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ❌ Unsubscribe handler
+function doGet(e) {
+  const token = e && e.parameter && e.parameter.unsubscribe ? e.parameter.unsubscribe : null;
+  if (!token) return HtmlService.createHtmlOutput("<p>Invalid unsubscribe request.</p>");
+  
+  const ss = getSheet();
+  const subs = ss.getSheetByName("Subscribers");
+  if (!subs) return HtmlService.createHtmlOutput("<p>Subscribers sheet missing.</p>");
+  
+  const data = subs.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if ((data[i][1] || "") === token) {
+      subs.getRange(i + 1, 3).setValue(false);
+      return HtmlService.createHtmlOutput("<p>You have turned off Jan Raj News notifications.</p>");
+    }
+  }
+  return HtmlService.createHtmlOutput("<p>Token not found or already unsubscribed.</p>");
+}
+
+// 📰 Latest Blog Post Fetch
+function fetchLatestPost() {
+  const resp = UrlFetchApp.fetch(FEED_URL, {muteHttpExceptions: true});
+  if (resp.getResponseCode() !== 200) throw new Error("Failed to fetch feed: " + resp.getResponseCode());
+  const xml = XmlService.parse(resp.getContentText());
+  const root = xml.getRootElement();
+  const channel = root.getChild("channel");
+  
+  if (channel) {
+    const items = channel.getChildren("item");
+    if (items && items.length > 0) {
+      const item = items[0];
+      const guid = item.getChildText("guid") || item.getChildText("link") || item.getChildText("title");
+      const title = item.getChildText("title") || "New News";
+      const link = item.getChildText("link") || "";
+      return {id: guid, title: title, link: link};
+    }
+  }
+
+  const entries = root.getChildren("entry");
+  if (entries && entries.length > 0) {
+    const e = entries[0];
+    const id = e.getChildText("id") || e.getChildText("link") || e.getChildText("title");
+    const title = e.getChildText("title") || "New News";
+    let link = "";
+    const linkElem = e.getChild("link");
+    if (linkElem) {
+      link = linkElem.getAttribute && linkElem.getAttribute("href") ? linkElem.getAttribute("href").getValue() : linkElem.getText() || "";
+    }
+    return {id: id, title: title, link: link};
+  }
+  return null;
+}
+
+// 🔔 Send notifications for new posts
+function checkAndSendNewPost() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(30000)) return;
+
+  try {
+    const ss = getSheet();
+    const meta = ss.getSheetByName("Meta");
+    if (!meta) throw new Error("Meta sheet not found. Create sheet named 'Meta' with B1 for lastPostId.");
+    const lastId = meta.getRange("B1").getValue();
+    const latest = fetchLatestPost();
+    if (!latest) return;
+    if (latest.id && latest.id === lastId) return;
+
+    const subsSheet = ss.getSheetByName("Subscribers");
+    const subsData = subsSheet.getDataRange().getValues();
+    const emails = [];
+    const tokens = {};
+
+    for (let i = 1; i < subsData.length; i++) {
+      const val = String(subsData[i][2]).trim().toLowerCase();
+      const sub = (val === "true" || val === "yes" || val === "1");
+      if (sub) {
+        const e = subsData[i][0];
+        const t = subsData[i][1];
+        emails.push(e);
+        tokens[e] = t;
+      }
+    }
+
+    if (emails.length === 0) {
+      meta.getRange("B1").setValue(latest.id);
+      return;
+    }
+
+    const subject = "Jan Raj News: " + latest.title;
+    const webBase = WEBAPP_BASE_URL;
+    emails.forEach(email => {
+      const token = tokens[email];
+      const unsub = webBase + "?unsubscribe=" + encodeURIComponent(token);
+      const htmlBody = `
+        <p>Hello,,</p>
+        <p>A new news has been published: <strong>${escapeHtml(latest.title)}</strong></p>
+        <p>Read here: <a href="${latest.link}">${latest.link}</a></p>
+        <hr>
+        <p>If you want to turn off notifications, <a href="${unsub}">unsubscribe</a> Do.</p>
+      `;
+      MailApp.sendEmail({
+        to: email,
+        subject: subject,
+        htmlBody: htmlBody,
+        noReply: true,
+        name: SENDER_NAME
+      });
+    });
+
+    meta.getRange("B1").setValue(latest.id);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function escapeHtml(text) {
+  if (!text) return "";
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
