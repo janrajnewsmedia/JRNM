@@ -750,14 +750,14 @@
     {
       "name": "Policy Privacy",
 	  "short_name": "Policy Privacy",
-      "url": "https://www.janrajnews.com/p/policy-privacy.html",
+      "url": "https://www.janrajnews.com/p/privacy-policy.html",
       "description": "Policy Privacy",
 	  "icons": [{ "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/appImages/android/android-launchericon-192-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Terms Conditions",
-	  "short_name": "PTerms Conditions",
-      "url": "https://www.janrajnews.com/p/terms-conditions.html",
+	  "short_name": "Terms Conditions",
+      "url": "https://www.janrajnews.com/p/term-conditions.html",
       "description": "Terms Conditions",
 	  "icons": [{ "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/appImages/android/android-launchericon-192-192.png", "sizes": "192x192" }]
     }
