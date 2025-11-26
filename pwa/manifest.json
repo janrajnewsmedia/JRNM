@@ -1,15 +1,15 @@
 {
   "name": "Jan Raj News",
   "short_name": "Jan Raj News",
-  "start_url": "https://www.janrajnews.com/",
+  "start_url": "https://www.janrajnews.com",
   "display": "standalone",
   "background_color": "#97979d",
   "theme_color": "#fd3a13",
   "orientation": "portrait",
-  "scope": "https://www.janrajnews.com/",
+  "scope": "https://www.janrajnews.com",
   "id": "mkaip",
   "lang": "hi",
-  "dir": "ltr",
+  "dir": "auto",
   "description": "Jan Raj News! No1 Hindi e-News Portal.",
   "categories": [
     "business",
