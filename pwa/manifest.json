@@ -708,7 +708,7 @@
   "screenshots": [
     {
       "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshotwide.jpg",
-      "sizes": "1280x800",
+      "sizes": "1280x720",
       "type": "image/jpeg"
     },
     {
