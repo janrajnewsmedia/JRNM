@@ -706,48 +706,6 @@
     }
   ],
   "screenshots": [
-    {
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-720.jpg",
-      "sizes": "1280x720",
-      "type": "image/jpeg",
-	  "platform": "wide",
-	  "label": "Jan Raj News"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-1080.jpg",
-      "sizes": "1920x1080",
-      "type": "image/jpeg",
-	  "platform": "wide",
-	  "label": "Jan Raj News"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-large.jpg",
-      "sizes": "2560x1440",
-      "type": "image/jpeg",
-      "form_factor": "wide",
-      "label": "Jan Raj News"
-    },
-	{
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-portrait.jpg",
-      "sizes": "1920x1080",
-      "type": "image/jpeg",
-	  "form_factor": "narrow",
-	  "label": "Jan Raj News"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-landscape.jpg",
-      "sizes": "1920x1080",
-      "type": "image/jpeg",
-	  "form_factor": "wide",
-	  "label": "Jan Raj News"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-small.jpg",
-      "sizes": "720x1280",
-      "type": "image/jpeg",
-	  "form_factor": "narrow",
-      "label": "Jan Raj News"
-    },
 	{
       "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-portrait-400x882.jpg",
       "sizes": "400x882",
