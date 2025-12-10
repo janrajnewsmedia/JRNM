@@ -714,10 +714,10 @@
       "label": "Jan Raj News"
     },
 	{
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-1080.jpg",
-      "sizes": "1920x1080",
+      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-1280x676.jpg",
+      "sizes": "1280x676",
       "type": "image/jpeg",
-	  "platform": "wide",
+	  "form_factor": "wide",
 	  "label": "Jan Raj News"
     }
   ],
