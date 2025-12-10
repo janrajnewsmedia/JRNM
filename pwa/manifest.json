@@ -3,12 +3,18 @@
   "short_name": "Jan Raj News",
   "start_url": "https://www.janrajnews.com",
   "display": "standalone",
+  "display_override": ["tabbed"],
+  "tab_strip": {
+    "new_tab_button": {
+      "url": "/"
+    }
+  },
   "background_color": "#97979d",
   "theme_color": "#fd3a13",
   "orientation": "portrait",
   "scope": "https://www.janrajnews.com",
   "id": "mkaip",
-  "lang": "hi",
+  "lang": "hi-IN",
   "dir": "auto",
   "description": "Jan Raj News – भारत का भरोसेमंद न्यूज़ पोर्टल, जहाँ राजनीति, समाज, खेल, मनोरंजन, तकनीक और दुनिया की ताज़ा खबरें हिंदी में पढ़ें।",
   "categories": [
@@ -20,6 +26,12 @@
     "lifestyle",
     "news",
     "politics"
+  ],
+  "handle_links": "auto",
+  "related_applications": [{
+      "platform": "webapp",
+      "url": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/manifest.json"
+    }
   ],
   "icons": [
     {
@@ -843,6 +855,22 @@
 	  "icons": [{ "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/appImages/android/android-launchericon-192-192.png", "sizes": "192x192" }]
     }
   ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*", ".png", ".jpg", ".jpeg", ".gif", ".webp"]
+        }
+      ]
+    }
+  },
   "edge_side_panel": {
     "preferred_width": 400
   }
