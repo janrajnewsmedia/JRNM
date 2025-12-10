@@ -712,6 +712,13 @@
       "type": "image/jpeg",
 	  "form_factor": "narrow",
       "label": "Jan Raj News"
+    },
+	{
+      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-720.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+	  "platform": "wide",
+	  "label": "Jan Raj News"
     }
   ],
   "display_override": [
