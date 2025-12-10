@@ -729,7 +729,7 @@
     },
 	{
       "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-portrait.jpg",
-      "sizes": "1080x1920",
+      "sizes": "1920x1080",
       "type": "image/jpeg",
 	  "label": "Jan Raj News"
     },
