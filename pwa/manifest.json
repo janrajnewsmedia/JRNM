@@ -754,20 +754,6 @@
       "label": "Jan Raj News"
     },
 	{
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-portrait-400x882-5.jpg",
-      "sizes": "400x882",
-      "type": "image/jpeg",
-	  "form_factor": "narrow",
-      "label": "Jan Raj News"
-    },
-	{
-      "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-mobile-portrait-400x882-6.jpg",
-      "sizes": "400x882",
-      "type": "image/jpeg",
-	  "form_factor": "narrow",
-      "label": "Jan Raj News"
-    },
-	{
       "src": "https://raw.githubusercontent.com/janrajnewsmedia/JRNM/refs/heads/main/pwa/screenshot-desktop-1280x776.jpg",
       "sizes": "1280x776",
       "type": "image/jpeg",
